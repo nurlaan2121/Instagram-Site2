@@ -1,4 +1,4 @@
-package java12.peaksoft.configs;
+package java12.configs;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +14,7 @@ import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("peaksoft")
+@ComponentScan("java12")
 @RequiredArgsConstructor
 
 public class WepAppConfig implements WebMvcConfigurer {

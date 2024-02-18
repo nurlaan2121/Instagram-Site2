@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Social Network</title>
+    <title>Create Post</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -49,6 +63,7 @@
             color: #fff;
             background-color: #0018ff;
         }
+
         .post {
             max-width: 400px; /* Устанавливаем максимальную ширину поста */
             margin: 0 auto; /* Центрируем пост по горизонтали */
@@ -74,6 +89,7 @@
             color: #666;
             line-height: 1.5;
         }
+
         .post .card-body {
             display: flex;
             justify-content: space-between;
@@ -100,6 +116,7 @@
         .post a.btn:hover {
             background-color: #0018ff;
         }
+
         nav {
             position: fixed;
             top: 0;
@@ -115,35 +132,104 @@
             top: -80px; /* Скрываем nav при фиксации */
         }
 
+
+        .profile-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .post-container {
+            margin-top: 20px;
+        }
+
+        .post {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .follower-info {
+            background-color: #fff;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0018ff;
+        }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>My Social Network</h1>
-</header>
-
 <nav>
-    <a href="#">Home</a>
-    <a th:href="
-    @{search}" class="nav-link">Search</a>
+    <a href="#"></a>
+    <a th:href="@{/home}" class="nav-link">Home</a>
+    <a href="#">Search</a>
     <a href="#">Messages</a>
     <a th:href="@{create/post/new}" class="nav-link">Create post </a>
     <a th:href="@{/myProfile}" class="nav-link">My profile </a>
     <a href="#"></a>
 </nav>
-<div th:each="post : ${myHomePosts}">
-    <div class="post">
-        <div class="post-content">
-            <h2 th:text="${post.title}"></h2>
-            <p th:text="${post.description}"></p>
-        </div>
-        <div class="post-actions">
-            <a th:href="@{'create/post/delete/' + ${post.id}}" class="btn btn-danger">DELETE</a>
-            <a th:href="@{'create/post/update/' + ${post.id}}" class="btn btn-primary">Edit</a>
-        </div>
-    </div>
-</div>
-</body>
 
+<form action="#" th:action="@{/create/post/save}" th:object="${newPost}" method="post">
+    <h2>Create Post</h2>
+
+    <label for="title">Title:</label>
+    <input type="text" th:field="*{title}" id="title" required="required"/>
+
+    <label for="description">Description:</label>
+    <input type="text" th:field="*{description}" id="description" required="required"/>
+
+    <label for="imageUrl">Image URL:</label>
+    <input type="text" th:field="*{images[0].imageUrl}" id="imageUrl" required="required"/>
+
+    <button type="submit">Add Post</button>
+</form>
+
+</body>
 </html>
+

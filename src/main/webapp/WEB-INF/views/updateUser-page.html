@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy8eFgks5l5u6CZ4OWu1PMyFJtIcdlfsXj"
+          crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 20%;
+            margin: 100px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 100px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #0018ff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0000e6;
+        }
+
+        #email-message,
+        #password-message {
+            color: #ff0000;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Edit Profile</h2>
+    <form th:action="@{/user/update2}" th:object="${currentUSer}" method="post" onsubmit="return validateForm()">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="form-group">
+            <label for="userName">UserName:</label>
+            <input type="text" th:field="*{userName}" id="userName" required="required"/>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" th:field="*{email}" id="email" required oninput="validateEmail()">
+            <div id="email-message"></div>
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="tel" th:field="*{phoneNumber}" id="phoneNumber" pattern="[+][0-9]{12}"
+                   placeholder="+996777289688" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" th:field="*{password}" id="password" required oninput="validatePassword()">
+            <div id="password-message"></div>
+        </div>
+        <input type="hidden" th:field="*{userInfo.id}"/>
+        <div class="form-group">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" th:field="*{userInfo.fullName}" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="bio">Biography:</label>
+            <input type="text" id="bio" th:field="*{userInfo.biography}" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="link">Link profile:</label>
+            <input type="text" id="link" th:field="*{userInfo.imageProfile}" class="form-control"/>
+        </div>
+        <label for="gender">Gender:</label>
+        <select th:field="*{userInfo.gender}" id="gender" name="gender" required="required">
+            <option value="MALE">MALE</option>
+            <option value="FEMALE">FEMALE</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+<script>
+    function validateEmail() {
+        var emailInput = document.getElementById('email');
+        var emailMessage = document.getElementById('email-message');
+
+        var email = emailInput.value;
+
+        // Проверка на корректный формат email
+        if (!isValidEmail(email)) {
+            emailMessage.textContent = 'Invalid email format.';
+        } else {
+            emailMessage.textContent = '';
+        }
+    }
+
+    function isValidEmail(email) {
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function validatePassword() {
+        var passwordInput = document.getElementById('password');
+        var passwordMessage = document.getElementById('password-message');
+
+        var password = passwordInput.value;
+
+        // Проверка на силу пароля (минимум 8 символов, содержит буквы, цифры и спецсимволы)
+        if (!isValidPassword(password)) {
+            passwordMessage.textContent = 'Password must be strong (at least 8 characters, including letters, numbers, and special characters).';
+        } else {
+            passwordMessage.textContent = '';
+        }
+    }
+
+    function isValidPassword(password) {
+        var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+        return passwordRegex.test(password);
+    }
+
+    function validateForm() {
+        var emailInput = document.getElementById('email');
+        var email = emailInput.value;
+
+        if (!isValidEmail(email)) {
+            alert('Invalid email format.');
+            return false;
+        }
+
+        var passwordInput = document.getElementById('password');
+        var password = passwordInput.value;
+
+        if (!isValidPassword(password)) {
+            alert('Password must be strong (at least 8 characters, including letters, numbers, and special characters).');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
+</body>
+</html>

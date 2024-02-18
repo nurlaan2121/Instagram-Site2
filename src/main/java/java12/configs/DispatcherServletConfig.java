@@ -1,4 +1,4 @@
-package java12.peaksoft.configs;
+package java12.configs;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

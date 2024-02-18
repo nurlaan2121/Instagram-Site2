@@ -1,4 +1,4 @@
-package java12.peaksoft.configs;
+package java12.configs;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.util.Objects;
 import java.util.Properties;
 @Configuration
-@ComponentScan(basePackages = "peaksoft")
+@ComponentScan(basePackages = "java12")
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
 public class HibernateConfig {
