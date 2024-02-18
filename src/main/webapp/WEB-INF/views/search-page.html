@@ -1,13 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Post Search</title>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+            color: #555;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
         .post {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
             border-radius: 12px;
@@ -23,32 +57,33 @@
 
         .post h2 {
             color: #333;
-            font-size: 1.5em;
-            margin-bottom: 10px;
+            font-size: 2em;
+            margin-bottom: 15px;
         }
 
         .post p {
             color: #666;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .post .card-body {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
         .post a.btn {
             text-decoration: none;
             color: #fff;
-            padding: 10px 15px;
+            padding: 12px 18px;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-right: 10px;
+            margin-right: 15px;
             text-align: center;
-            width: 100px;
+            width: 120px;
+            display: inline-block;
         }
 
         .post a.btn-like {
@@ -59,137 +94,80 @@
             background-color: #ff9933;
         }
 
-        .post a.btn-danger {
-            background-color: #ff4d4d;
-        }
-
         .post a.btn:hover {
             background-color: #0018ff;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        input {
-            width: 300px;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
-
-        li:hover {
-            transform: scale(1.02);
         }
     </style>
 </head>
 <body>
 
 <h2>Post Search</h2>
-<input type="text" id="searchInput" placeholder="Search posts..." oninput="searchPosts()">
+<div style="position: relative;">
+    <input type="text" id="searchInput" placeholder="Search posts..." />
+    <i class="search-icon fas fa-search" onclick="searchPosts()"></i>
+</div>
 
-<ul id="postList">
-    <li th:each="post : ${posts}">
-        <div class="post">
-            <h2 th:text="${post.title}"></h2>
-            <p th:text="${post.content}"></p>
-            <div class="card-body">
-                <a href="#" class="btn btn-like" onclick="likePost(${post.id})"><i class="fas fa-thumbs-up"></i>
-                    Like</a>
-                <a href="#" class="btn btn-comment" onclick="commentPost(${post.id})"><i class="fas fa-comment"></i>
-                    Comment</a>
-            </div>
+<div id="postList">
+    <!-- Example Post -->
+    <div class="post">
+        <h2>Post Title</h2>
+        <p>Post Content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <div class="card-body">
+            <a href="#" class="btn btn-like" onclick="likePost(1)"><i class="fas fa-thumbs-up"></i> Like</a>
+            <a href="#" class="btn btn-comment" onclick="commentPost(1)"><i class="fas fa-comment"></i> Comment</a>
         </div>
-    </li>
-</ul>
+    </div>
+</div>
 
-<script th:inline="javascript">
-    var allPosts = [];
-
-    window.onload = function () {
-        loadAllPosts();
-    };
-
-    function loadAllPosts() {
-        fetch("/posts/all")
-            .then(response => response.json())
-            .then(posts => {
-                allPosts = posts;
-                displayPosts(posts);
-            })
-            .catch(error => console.error(error));
-    }
-
+<script>
+    const allPosts = [
+        { id: 1, title: "Post 1", content: "Content of Post 1" },
+        { id: 2, title: "Post 2", content: "Content of Post 2" },
+        // Add more posts as needed
+    ];
 
     function searchPosts() {
         const searchInput = document.getElementById("searchInput").value.toLowerCase();
         const postList = document.getElementById("postList");
-        postList.innerHTML = ""; // Очищаем предыдущие результаты
+        postList.innerHTML = "";
 
         const filteredPosts = allPosts.filter(post =>
             post.title.toLowerCase().includes(searchInput) ||
             post.content.toLowerCase().includes(searchInput)
         );
 
-        console.log("Search Input:", searchInput);
-        console.log("Filtered Posts:", filteredPosts);
-
         displayPosts(filteredPosts);
     }
-
 
     function displayPosts(posts) {
         const postList = document.getElementById("postList");
         posts.forEach(post => {
-            const listItem = document.createElement("li");
-            listItem.innerHTML = `
-                <div class="post">
-                    <h2>${post.title}</h2>
-                    <p>${post.content}</p>
-                    <div class="card-body">
-                        <a href="#" class="btn btn-like" onclick="likePost(${post.id})"><i class="fas fa-thumbs-up"></i> Like</a>
-                        <a href="#" class="btn btn-comment" onclick="commentPost(${post.id})"><i class="fas fa-comment"></i> Comment</a>
-                    </div>
+            const postElement = document.createElement("div");
+            postElement.classList.add("post");
+            postElement.innerHTML = `
+                <h2>${post.title}</h2>
+                <p>${post.content}</p>
+                <div class="card-body">
+                    <a href="#" class="btn btn-like" onclick="likePost(${post.id})"><i class="fas fa-thumbs-up"></i> Like</a>
+                    <a href="#" class="btn btn-comment" onclick="commentPost(${post.id})"><i class="fas fa-comment"></i> Comment</a>
                 </div>`;
-            postList.appendChild(listItem);
+            postList.appendChild(postElement);
         });
     }
 
     function likePost(postId) {
-        console.log('Liked post with ID: ' + postId);
+        // Add logic for liking a post (e.g., send request to server)
+        console.log(`Liked post with ID: ${postId}`);
     }
 
     function commentPost(postId) {
-        console.log('Commented on post with ID: ' + postId);
+        // Add logic for commenting on a post (e.g., show comment form)
+        console.log(`Commented on post with ID: ${postId}`);
     }
-</script>
 
+    // Initial display of all posts
+    displayPosts(allPosts);
+</script>
 
 </body>
 </html>

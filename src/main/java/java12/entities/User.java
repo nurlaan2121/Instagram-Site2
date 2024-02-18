@@ -21,14 +21,14 @@ public class User extends GeneratedId {
     private String email;
     @Column(unique = true, name = "phone_number")
     private String phoneNumber;
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.MERGE,CascadeType.REFRESH})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH})
     private UserInfo userInfo;
-    @OneToMany(mappedBy = "user",cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE})
     private List<Comment> commentList = new ArrayList<>();
     @ManyToOne
     private Image image;
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Follower follower;
-    @OneToMany(mappedBy = "user",cascade = {CascadeType.REMOVE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.MERGE})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     private List<Post> posts = new ArrayList<>();
 }

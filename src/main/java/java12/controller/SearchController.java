@@ -28,4 +28,5 @@ public class SearchController {
         model.addAttribute("posts", posts);
         return "search-page"; // Убедитесь, что у вас есть HTML-файл с таким именем
     }
+
 }
