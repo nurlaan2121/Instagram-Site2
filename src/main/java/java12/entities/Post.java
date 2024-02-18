@@ -1,5 +1,6 @@
 package java12.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lombok.Data;
@@ -21,12 +22,13 @@ public class Post extends GeneratedId {
     private String description;
     @Column(name = "created_ad")
     private Date createdAd;
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE},fetch = FetchType.EAGER)
     private List<Comment> comments = new ArrayList<>();
-    @OneToMany(cascade = {CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.REMOVE},fetch = FetchType.EAGER)
     private List<Like> likes = new ArrayList<>();
-    @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.PERSIST},fetch = FetchType.EAGER)
     private List<Image> images = new ArrayList<>();
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     private User user;
 }

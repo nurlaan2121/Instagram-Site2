@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("create/post")
@@ -53,5 +54,6 @@ public class PostController {
         postInterface.update(post);
         return "redirect:/home";
     }
+
 
 }

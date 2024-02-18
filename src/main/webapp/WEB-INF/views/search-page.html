@@ -100,12 +100,12 @@
     </style>
 </head>
 <body>
-
 <h2>Post Search</h2>
 <div style="position: relative;">
-    <input type="text" id="searchInput" placeholder="Search posts..." />
+    <input type="text" id="searchInput" placeholder="Search posts..."/>
     <i class="search-icon fas fa-search" onclick="searchPosts()"></i>
 </div>
+
 
 <div id="postList">
     <!-- Example Post -->
@@ -119,41 +119,72 @@
     </div>
 </div>
 
-<script>
-    const allPosts = [
-        { id: 1, title: "Post 1", content: "Content of Post 1" },
-        { id: 2, title: "Post 2", content: "Content of Post 2" },
-        // Add more posts as needed
-    ];
 
+<script>
+    var allPosts;
+
+    function loadPostsFromServer() {
+        console.log('Fetching posts...'); // Добавленная строка для проверки вызова функции
+        fetch('/getPosts')  // Укажите путь к вашему методу контроллера
+            .then(response => response.json())
+            .then(posts => {
+                allPosts = posts; // Присвоение полученных данных переменной allPosts
+                displayPosts(posts); // Отображение постов
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadPostsFromServer();
+
+        // Добавление обработчика события input для поля ввода
+        document.getElementById("searchInput").addEventListener("input", function () {
+            searchPosts();
+        });
+    });
+
+    // Объявление функции searchPosts
     function searchPosts() {
         const searchInput = document.getElementById("searchInput").value.toLowerCase();
         const postList = document.getElementById("postList");
         postList.innerHTML = "";
 
-        const filteredPosts = allPosts.filter(post =>
-            post.title.toLowerCase().includes(searchInput) ||
-            post.content.toLowerCase().includes(searchInput)
-        );
+        if (allPosts) {
+            const filteredPosts = allPosts.filter(post =>
+                post.title.toLowerCase().includes(searchInput)
+            );
 
-        displayPosts(filteredPosts);
+            if (filteredPosts.length > 0) {
+                displayPosts(filteredPosts);
+            } else {
+                postList.innerHTML = "<p>No matching posts found.</p>";
+            }
+        } else {
+            console.error("Error: 'allPosts' is not defined.");
+        }
     }
 
     function displayPosts(posts) {
         const postList = document.getElementById("postList");
-        posts.forEach(post => {
-            const postElement = document.createElement("div");
-            postElement.classList.add("post");
-            postElement.innerHTML = `
+
+        if (postList) {  // Проверка наличия postList
+            posts.forEach(post => {
+                const postElement = document.createElement("div");
+                postElement.classList.add("post");
+                postElement.innerHTML = `
                 <h2>${post.title}</h2>
                 <p>${post.content}</p>
                 <div class="card-body">
                     <a href="#" class="btn btn-like" onclick="likePost(${post.id})"><i class="fas fa-thumbs-up"></i> Like</a>
                     <a href="#" class="btn btn-comment" onclick="commentPost(${post.id})"><i class="fas fa-comment"></i> Comment</a>
                 </div>`;
-            postList.appendChild(postElement);
-        });
+                postList.appendChild(postElement);
+            });
+        } else {
+            console.error("Error: 'postList' is not defined.");
+        }
     }
+
 
     function likePost(postId) {
         // Add logic for liking a post (e.g., send request to server)
