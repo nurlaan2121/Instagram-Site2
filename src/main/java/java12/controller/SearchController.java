@@ -22,11 +22,10 @@ public class SearchController {
     public String search(){
         return "search-page";
     }
-    @GetMapping("search")
-    public String showSearchPage(Model model) {
+    @GetMapping("/search")
+    public String showPosts(Model model) {
         List<Post> posts = postInterface.getAllPosts();
         model.addAttribute("posts", posts);
-        return "search-page"; // Убедитесь, что у вас есть HTML-файл с таким именем
+        return "search-page";
     }
-
 }

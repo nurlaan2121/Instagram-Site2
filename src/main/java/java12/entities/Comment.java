@@ -22,7 +22,7 @@ public class Comment extends GeneratedId {
     private Date createdAd;
     @ManyToOne
     private Post post;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Like> likes = new ArrayList<>();
     @ManyToOne
     private User user;
