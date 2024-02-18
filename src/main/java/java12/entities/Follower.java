@@ -15,8 +15,8 @@ import java.util.List;
 @Setter
 @SequenceGenerator(name = "id_gen2", allocationSize = 1, sequenceName = "follower_id_seq")
 public class Follower extends GeneratedId {
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> subscribers = new ArrayList<>();
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> subscriptions = new ArrayList<>();
 }

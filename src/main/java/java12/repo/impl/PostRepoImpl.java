@@ -3,13 +3,16 @@ package java12.repo.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java12.controller.MainPageController;
+import java12.entities.Follower;
 import java12.entities.Post;
+import java12.entities.User;
 import java12.repo.PostRepo;
 import java12.service.impl.UserImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,7 +53,22 @@ public class PostRepoImpl implements PostRepo {
 
     @Override
     public List<Post> getMyHomePosts() {
-        return Collections.emptyList();
+        List<Long> subscriptions = UserImpl.user1.getFollower().getSubscriptions();
+        List<Post> homePosts = new ArrayList<>();
+        List<User> followUsers = new ArrayList<>();
+        List<User> users = entityManager.createQuery("select u from User u ", User.class).getResultList();
+        for (int i = 0; i < subscriptions.size(); i++) {
+            for (int i1 = 0; i1 < users.size(); i1++) {
+                if (subscriptions.get(i).equals(users.get(i1).getId())) {
+                    followUsers.add(users.get(i1));
+                }
+            }
+        }
+        for (int i = 0; i < followUsers.size(); i++) {
+            List<Post> posts = entityManager.createQuery("select p from Post p where p.user.id = :userId order by createdAd desc", Post.class).setParameter("userId", followUsers.get(i)).getResultList();
+            homePosts.addAll(posts);
+        }
+        return homePosts;
     }
 
     @Override
