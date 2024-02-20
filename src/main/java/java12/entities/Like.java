@@ -14,4 +14,6 @@ public class Like extends GeneratedId {
     private Boolean isLike;
     @OneToOne
     private User user;
+    @ManyToOne
+    private Post post;
 }

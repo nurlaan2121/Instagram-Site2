@@ -38,8 +38,9 @@ public class PostController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
+        System.out.println(id);
         postInterface.deletePost(id);
-        return "redirect:/home";
+        return "redirect:/myProfile";
     }
 
     @GetMapping("/update/{id}")
@@ -52,8 +53,9 @@ public class PostController {
     @PostMapping("/update2")
     public String update2(@ModelAttribute("oldPost") Post post) {
         postInterface.update(post);
-        return "redirect:/home";
+        return "redirect:/myProfile";
     }
+
 
 
 }
