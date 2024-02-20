@@ -19,4 +19,14 @@ public interface PostInterface {
     List<Post> getMyHomePosts();
 
     List<Post> getAllPosts();
+
+    void likePost(Long idPost);
+
+    List<Post> getLikedPost();
+
+    boolean isPostLikedByCurrentUser(Long postId);
+
+    void unlikePost(Long postId);
+
+    void addComment(Long postId, String commentText);
 }

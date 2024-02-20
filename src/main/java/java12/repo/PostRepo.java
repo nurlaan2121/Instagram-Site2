@@ -18,4 +18,15 @@ public interface PostRepo {
     List<Post> getMyHomePosts();
 
     List<Post> getAllPosts();
+
+
+    void like(Long idPost);
+
+    List<Post> getLikedPost();
+
+    boolean check(Long postId);
+
+    void unLike(Long postId);
+
+    void comment(Long postId, String commentText);
 }

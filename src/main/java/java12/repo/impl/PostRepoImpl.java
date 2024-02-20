@@ -3,15 +3,15 @@ package java12.repo.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java12.controller.MainPageController;
-import java12.entities.Follower;
-import java12.entities.Post;
-import java12.entities.User;
+import java12.entities.*;
 import java12.repo.PostRepo;
 import java12.service.impl.UserImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,10 +36,13 @@ public class PostRepoImpl implements PostRepo {
         return entityManager.createQuery("select p from Post p join User u on p.user.id = u.id where u.id=:userId", Post.class).setParameter("userId", userId).getResultList();
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
-        Post post = entityManager.find(Post.class, id);
-        entityManager.remove(post);
+        int y = entityManager.createQuery("delete from Comment c where c.post.id = :idPost").setParameter("idPost", id).executeUpdate();
+        int r = entityManager.createQuery("delete from Like l where l.post.id = :idPost").setParameter("idPost", id).executeUpdate();
+        int i = entityManager.createQuery("delete from Post p where p.id = :idPost").setParameter("idPost", id).executeUpdate();
+        System.out.println(i);
     }
 
     @Override
@@ -73,6 +76,63 @@ public class PostRepoImpl implements PostRepo {
 
     @Override
     public List<Post> getAllPosts() {
-        return entityManager.createQuery("select p from Post p", Post.class).getResultList();
+        return entityManager.createQuery("SELECT DISTINCT p FROM Post p " +
+                        "LEFT JOIN FETCH p.comments " +
+                        "LEFT JOIN FETCH p.likes " +
+                        "LEFT JOIN FETCH p.images " +
+                        "LEFT JOIN FETCH p.user", Post.class)
+                .getResultList();
+
+//        return entityManager.createQuery("select p from Post p", Post.class).getResultList();
+    }
+
+    @Override
+    public void like(Long idPost) {
+        Like like = new Like();
+        Post post = entityManager.find(Post.class, idPost);
+        like.setIsLike(true);
+        like.setPost(post);
+        like.setUser(UserImpl.user1);
+        post.getLikes().add(like);
+        entityManager.persist(like);
+        entityManager.merge(post);
+    }
+
+    @Override
+    public List<Post> getLikedPost() {
+        Long id = UserImpl.user1.getId();
+        return entityManager.createQuery("select p from Post p join Like l on p.id = l.post.id where l.user.id = :userId", Post.class).setParameter("userId", id).getResultList();
+    }
+
+    @Override
+    public boolean check(Long postId) {
+        Like singleResult = entityManager.createQuery("select l from Like l where l.post.id = :postId and l.user.id = :userId", Like.class).setParameter("postId", postId).setParameter("userId", UserImpl.user1.getId()).getSingleResult();
+        return singleResult != null;
+    }
+
+    @Override
+    public void unLike(Long postId) {
+        Post currentPost = entityManager.createQuery("select p from Post p where p.id = :postId", Post.class).setParameter("postId", postId).getSingleResult();
+        int i = entityManager.createQuery("delete  from Like l where l.post.id = :postId and l.user.id = :userId").setParameter("postId", postId).setParameter("userId", UserImpl.user1.getId()).executeUpdate();
+        for (int j = 0; j < currentPost.getLikes().size(); j++) {
+            if (currentPost.getLikes().get(j).getUser().getId().equals(UserImpl.user1.getId())) {
+                currentPost.getLikes().remove(j);
+                break;
+            }
+        }
+        entityManager.merge(currentPost);
+    }
+
+    @Override
+    public void comment(Long postId, String commentText) {
+        Comment comment = new Comment();
+        comment.setComment(commentText);
+        Post currentPost = entityManager.createQuery("select p from Post p where p.id = :idPost", Post.class).setParameter("idPost", postId).getSingleResult();
+        comment.setPost(currentPost);
+        comment.setUser(UserImpl.user1);
+        comment.setCreatedAd(Date.valueOf(LocalDate.now()));
+        entityManager.persist(comment);
+        currentPost.getComments().add(comment);
+        entityManager.merge(currentPost);
     }
 }

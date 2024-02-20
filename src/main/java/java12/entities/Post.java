@@ -22,13 +22,14 @@ public class Post extends GeneratedId {
     private String description;
     @Column(name = "created_ad")
     private Date createdAd;
-    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE},fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE,CascadeType.MERGE,CascadeType.REFRESH}, fetch = FetchType.EAGER)
     private List<Comment> comments = new ArrayList<>();
-    @OneToMany(cascade = {CascadeType.REMOVE},fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = {CascadeType.PERSIST, CascadeType.REMOVE,CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Like> likes = new ArrayList<>();
-    @OneToMany(cascade = {CascadeType.REMOVE,CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Image> images = new ArrayList<>();
     @JsonIgnore
-    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     private User user;
 }

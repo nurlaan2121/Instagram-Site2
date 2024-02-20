@@ -55,4 +55,29 @@ public class PostImpl implements PostInterface {
     public List<Post> getAllPosts() {
         return postRepo.getAllPosts();
     }
+
+    @Override
+    public void likePost(Long idPost) {
+        postRepo.like(idPost);
+    }
+
+    @Override
+    public List<Post> getLikedPost() {
+        return postRepo.getLikedPost();
+    }
+
+    @Override
+    public boolean isPostLikedByCurrentUser(Long postId) {
+        return postRepo.check(postId);
+    }
+
+    @Override
+    public void unlikePost(Long postId) {
+        postRepo.unLike(postId);
+    }
+
+    @Override
+    public void addComment(Long postId, String commentText) {
+        postRepo.comment(postId,commentText);
+    }
 }
