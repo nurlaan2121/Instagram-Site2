@@ -76,14 +76,7 @@ public class PostRepoImpl implements PostRepo {
 
     @Override
     public List<Post> getAllPosts() {
-        return entityManager.createQuery("SELECT DISTINCT p FROM Post p " +
-                        "LEFT JOIN FETCH p.comments " +
-                        "LEFT JOIN FETCH p.likes " +
-                        "LEFT JOIN FETCH p.images " +
-                        "LEFT JOIN FETCH p.user", Post.class)
-                .getResultList();
-
-//        return entityManager.createQuery("select p from Post p", Post.class).getResultList();
+        return entityManager.createQuery("select p from Post p", Post.class).getResultList();
     }
 
     @Override
