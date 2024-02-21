@@ -5,12 +5,12 @@ import java12.entities.User;
 import java12.service.PostInterface;
 import java12.service.UserInterface;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import java.util.List;
 
@@ -20,16 +20,19 @@ import java.util.List;
 public class SearchController {
     private final PostInterface postInterface;
     private final UserInterface userInterface;
+
     @GetMapping("searchу")
-    public String search(){
+    public String search() {
         return "search-page";
     }
+
     @GetMapping("/search")
     public String showPosts(Model model) {
         List<Post> posts = postInterface.getAllPosts();
         model.addAttribute("posts", posts);
         return "search-page";
     }
+
     @GetMapping("/searchUser")
     public String showPostsUser(Model model) {
         List<User> users = userInterface.getAllUsers();
