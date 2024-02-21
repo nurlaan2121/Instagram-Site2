@@ -1,6 +1,7 @@
 package java12.controller;
 
 import java12.entities.User;
+import java12.exceptions.NotFoundException;
 import java12.service.UserInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,8 @@ public class MainPageController {
 
     private final UserInterface userInterface;
     @GetMapping("re")
-    public String mainPage2() {
+    public String mainPage2(Model model) {
+        model.addAttribute("newUser", new User());
         return "main-page";
     }
     @GetMapping()
@@ -29,8 +31,8 @@ public class MainPageController {
     public String save(@ModelAttribute("newStudent") User user){
         try {
             userInterface.signIn(user);
-        } catch (Exception e) {
-            System.out.println("KATA");
+        } catch (NotFoundException e) {
+            return "error-page";
         }
         return "redirect:/home";
     }

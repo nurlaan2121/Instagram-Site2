@@ -31,14 +31,9 @@ public class UserImpl implements UserInterface {
     }
 
     @Override
-    public User signIn(User user) {
-        try {
-            user1 = userRepo.signIn(user);
-            System.out.println(user1.getId()+ "  " + user.getUserName());
-        } catch (NotFoundException e) {
-            System.out.println("USERIMPL EXCEP");
-        }
-        return user1;
+    public void signIn(User user) throws NotFoundException {
+        user1 = userRepo.signIn(user);
+        System.out.println(user1.getId() + "  " + user.getUserName());
     }
 
     @Override
@@ -54,5 +49,10 @@ public class UserImpl implements UserInterface {
     @Override
     public List<User> getMySubscription() {
         return userRepo.getMySubscription();
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepo.getAllUser();
     }
 }

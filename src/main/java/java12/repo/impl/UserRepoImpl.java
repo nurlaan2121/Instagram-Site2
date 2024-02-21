@@ -2,6 +2,7 @@ package java12.repo.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java12.entities.Follower;
 import java12.entities.User;
 import java12.exceptions.NotFoundException;
 import java12.repo.UserRepo;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,7 +58,13 @@ public class UserRepoImpl implements UserRepo {
 
     @Override
     public List<User> getMySubscription() {
-        Long followerId = UserImpl.user1.getFollower().getId();
-        return Collections.emptyList();
+        List<User> users = new ArrayList<>();
+       Follower currentFollower = entityManager.createQuery("select f from Follower f where f.id = :followerId", Follower.class).setParameter("followerId", UserImpl.user1.getFollower().getId()).getSingleResult();
+        List<Long> subscriptions = currentFollower.getSubscriptions();
+        for (int i = 0; i < subscriptions.size(); i++) {
+            User fori = entityManager.createQuery("select u from User u where u.id = :fori", User.class).setParameter("fori", subscriptions.get(i)).getSingleResult();
+            users.add(fori);
+        }
+        return users;
     }
 }
