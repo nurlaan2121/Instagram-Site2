@@ -1,4 +1,5 @@
 package java12.service.impl;
+import java12.entities.Comment;
 import java12.entities.Post;
 import java12.entities.User;
 import java12.repo.PostRepo;
@@ -53,7 +54,15 @@ public class PostImpl implements PostInterface {
 
     @Override
     public List<Post> getAllPosts() {
-        return postRepo.getAllPosts();
+        List<Post> allPosts = postRepo.getAllPosts();
+        for (Post allPost : allPosts) {
+            System.out.println("allPost.getTitle() = " + allPost.getTitle());
+            for (Comment comment : allPost.getComments()) {
+                System.out.println("comment.getComment() = " + comment.getComment());
+            }
+        }
+
+        return allPosts;
     }
 
     @Override
