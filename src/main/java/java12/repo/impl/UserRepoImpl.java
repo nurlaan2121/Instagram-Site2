@@ -48,7 +48,7 @@ public class UserRepoImpl implements UserRepo {
     @Override
     public User getCurrentUser(User user) {
         Long idUSer = user.getId();
-        return entityManager.find(User.class,idUSer);
+        return entityManager.find(User.class, idUSer);
     }
 
     @Override
@@ -59,12 +59,17 @@ public class UserRepoImpl implements UserRepo {
     @Override
     public List<User> getMySubscription() {
         List<User> users = new ArrayList<>();
-       Follower currentFollower = entityManager.createQuery("select f from Follower f where f.id = :followerId", Follower.class).setParameter("followerId", UserImpl.user1.getFollower().getId()).getSingleResult();
+        Follower currentFollower = entityManager.createQuery("select f from Follower f where f.id = :followerId", Follower.class).setParameter("followerId", UserImpl.user1.getFollower().getId()).getSingleResult();
         List<Long> subscriptions = currentFollower.getSubscriptions();
         for (int i = 0; i < subscriptions.size(); i++) {
             User fori = entityManager.createQuery("select u from User u where u.id = :fori", User.class).setParameter("fori", subscriptions.get(i)).getSingleResult();
             users.add(fori);
         }
         return users;
+    }
+
+    @Override
+    public List<User> search(String keyword) {
+        return entityManager.createQuery("select u from User u join Follower f on u.follower.id  = f.id where u.email ilike (:key) or u.userName ilike (:key) or u.userInfo.fullName ilike (:key)", User.class).setParameter("key", keyword).getResultList();
     }
 }

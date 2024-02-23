@@ -16,4 +16,6 @@ public interface UserInterface {
     List<User> getMySubscription();
 
     List<User> getAllUsers();
+
+    List<User> search(String keyword);
 }

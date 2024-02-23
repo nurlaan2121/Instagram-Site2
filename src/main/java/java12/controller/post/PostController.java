@@ -4,6 +4,7 @@ import java12.entities.Post;
 import java12.entities.User;
 import java12.service.PostInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("create/post")
 @RequiredArgsConstructor
 public class PostController {
+    @Autowired
     private final PostInterface postInterface;
 
     @GetMapping()

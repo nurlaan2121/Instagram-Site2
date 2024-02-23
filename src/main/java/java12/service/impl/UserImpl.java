@@ -55,4 +55,9 @@ public class UserImpl implements UserInterface {
     public List<User> getAllUsers() {
         return userRepo.getAllUser();
     }
+
+    @Override
+    public List<User> search(String keyword) {
+        return userRepo.search("%" + keyword + "%");
+    }
 }

@@ -18,4 +18,6 @@ public interface UserRepo {
     void update(User user);
 
     List<User> getMySubscription();
+
+    List<User> search(String keyword);
 }

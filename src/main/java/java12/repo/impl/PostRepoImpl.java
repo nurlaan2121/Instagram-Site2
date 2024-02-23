@@ -3,6 +3,8 @@ package java12.repo.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java12.controller.MainPageController;
+import java12.dtoes.LikeDTO;
+import java12.dtoes.PostDTO;
 import java12.entities.*;
 import java12.repo.PostRepo;
 import java12.service.impl.UserImpl;
@@ -75,20 +77,42 @@ public class PostRepoImpl implements PostRepo {
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return entityManager.createQuery("select p from Post p", Post.class).getResultList();
+    public List<PostDTO> getAllPosts() {
+        List<PostDTO> posts = entityManager.createQuery(
+                "SELECT new java12.dtoes.PostDTO(p.id, p.title, p.description, p.user.id, p.createdAd) FROM Post p",
+                PostDTO.class
+        ).getResultList();
+        for (int i = 0; i < posts.size(); i++) {
+            Long id = posts.get(i).getId();
+            List<LikeDTO> likes = entityManager.createQuery(
+                    "SELECT new java12.dtoes.LikeDTO(l.id,l.user.id,l.post.id) FROM Like l where l.post.id = :postId", LikeDTO.class).setParameter("postId", id).getResultList();
+            posts.get(i).setLikes(likes);
+        }
+        return posts;
     }
 
     @Override
     public void like(Long idPost) {
-        Like like = new Like();
         Post post = entityManager.find(Post.class, idPost);
-        like.setIsLike(true);
-        like.setPost(post);
-        like.setUser(UserImpl.user1);
-        post.getLikes().add(like);
-        entityManager.persist(like);
-        entityManager.merge(post);
+        boolean isYeas = false;
+        for (int i = 0; i < post.getLikes().size(); i++) {
+            if (post.getLikes().get(i).getUser().getId().equals(UserImpl.user1.getId())) {
+                post.getLikes().remove(i);
+                isYeas = true;
+                int j = entityManager.createQuery("delete  from Like l where l.post.id = :postId and l.user.id = :userId").setParameter("postId", idPost).setParameter("userId", UserImpl.user1.getId()).executeUpdate();
+                break;
+            }
+        }
+        if (!isYeas) {
+            Like like = new Like();
+            like.setIsLike(true);
+            like.setPost(post);
+            like.setUser(UserImpl.user1);
+            post.getLikes().add(like);
+            entityManager.persist(like);
+            entityManager.merge(post);
+        }
+
     }
 
     @Override

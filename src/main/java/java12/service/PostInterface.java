@@ -1,5 +1,6 @@
 package java12.service;
 
+import java12.dtoes.PostDTO;
 import java12.entities.Post;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public interface PostInterface {
 
     List<Post> getMyHomePosts();
 
-    List<Post> getAllPosts();
+    List<PostDTO> getAllPosts();
 
     void likePost(Long idPost);
 
