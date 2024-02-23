@@ -4,10 +4,7 @@ import java12.entities.User;
 import java12.service.UserInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +25,5 @@ public class SearchUserController {
     public List<User> getAllSUsers() {
         return userInterface.getAllUsers();
     }
+
 }

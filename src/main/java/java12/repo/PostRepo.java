@@ -1,5 +1,6 @@
 package java12.repo;
 
+import java12.dtoes.PostDTO;
 import java12.entities.Post;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,7 @@ public interface PostRepo {
 
     List<Post> getMyHomePosts();
 
-    List<Post> getAllPosts();
+    List<PostDTO> getAllPosts();
 
 
     void like(Long idPost);

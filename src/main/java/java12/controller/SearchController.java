@@ -1,5 +1,6 @@
 package java12.controller;
 
+import java12.dtoes.PostDTO;
 import java12.entities.Post;
 import java12.entities.User;
 import java12.service.PostInterface;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.util.List;
@@ -28,15 +30,19 @@ public class SearchController {
 
     @GetMapping("/search")
     public String showPosts(Model model) {
-        List<Post> posts = postInterface.getAllPosts();
+        List<PostDTO> posts = postInterface.getAllPosts();
         model.addAttribute("posts", posts);
         return "search-page";
     }
 
     @GetMapping("/searchUser")
-    public String showPostsUser(Model model) {
-        List<User> users = userInterface.getAllUsers();
-        model.addAttribute("users", users);
+    public String showPostsUser() {
+        return "searchUser-page";
+    }
+    @GetMapping("/users/search")
+    String searchUsers(@RequestParam String keyword, Model model){
+        List<User> searchUsers = userInterface.search(keyword);
+        model.addAttribute("searchUsers", searchUsers);
         return "searchUser-page";
     }
 

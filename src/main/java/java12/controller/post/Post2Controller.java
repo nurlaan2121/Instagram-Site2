@@ -1,9 +1,11 @@
 package java12.controller.post;
 
 import jakarta.servlet.http.HttpServletResponse;
+import java12.dtoes.PostDTO;
 import java12.entities.Post;
 import java12.service.PostInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +18,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 
 public class Post2Controller {
+    @Autowired
     private final PostInterface postInterface;
 
     @GetMapping("/getPosts")
     @ResponseBody
-    public List<Post> getPosts() {
+    public List<PostDTO> getPosts() {
         return postInterface.getAllPosts();
     }
 
@@ -41,21 +44,5 @@ public class Post2Controller {
         String commentText = requestBody.get("commentText");
         postInterface.addComment(id, commentText);
         return "redirect:/search";
-    }
-
-    @DeleteMapping("/like/{postId}")
-    @ResponseBody
-    public ResponseEntity<String> unlikePost(@PathVariable Long postId) {
-        // Проверьте, есть ли у пользователя лайк для данного поста
-        boolean isLiked = postInterface.isPostLikedByCurrentUser(postId);
-
-        if (isLiked) {
-            // Удалите лайк из базы данных
-            postInterface.unlikePost(postId);
-            return new ResponseEntity<>("Post unliked successfully", HttpStatus.OK);
-        } else {
-            // Если лайка нет, верните соответствующий статус
-            return new ResponseEntity<>("Post is not liked by the current user", HttpStatus.BAD_REQUEST);
-        }
     }
 }
