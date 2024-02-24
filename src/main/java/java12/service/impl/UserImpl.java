@@ -1,6 +1,7 @@
 package java12.service.impl;
 
 import java12.entities.Follower;
+import java12.entities.Post;
 import java12.entities.User;
 import java12.entities.UserInfo;
 import java12.exceptions.NotFoundException;
@@ -59,5 +60,30 @@ public class UserImpl implements UserInterface {
     @Override
     public List<User> search(String keyword) {
         return userRepo.search("%" + keyword + "%");
+    }
+
+    @Override
+    public void subscribe(Long userId) {
+        userRepo.subscribe(userId);
+    }
+
+    @Override
+    public User profile(Long userId) {
+        return userRepo.profileFindUser(userId);
+    }
+
+    @Override
+    public List<Post> getAllPostFindUser(Long userId) {
+        return userRepo.getAllPostFindUser(userId);
+    }
+
+    @Override
+    public List<User> findUserGetAllSubscriptions(Long userId) {
+        return userRepo.findUserGetAllSubscriptions(userId);
+    }
+
+    @Override
+    public List<User> findUserGetAllSubscribers(Long userId) {
+        return userRepo.findUserGetAllSubscribers(userId);
     }
 }

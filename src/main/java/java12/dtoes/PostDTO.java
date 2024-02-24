@@ -14,6 +14,7 @@ public class PostDTO {
     private String description;
     private List<LikeDTO> likes;
     private Long ownerId;
+    private ImageDTO imageDTO;
     private Date createdAd;
 
     public PostDTO(Long id, String title, String description, Long ownerId, Date createdAd) {

@@ -109,13 +109,6 @@
     </style>
 </head>
 <body>
-<h1>User Search</h1>
-
-<form th:action="@{/users/search}" method="get">
-    <label for="keyword">Keyword:</label>
-    <input type="text" id="keyword" name="keyword" required>
-    <button type="submit">Search</button>
-</form>
 <table>
     <thead>
     <tr>
@@ -126,7 +119,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="user : ${searchUsers}">
+    <tr th:each="user : ${allSubscribers}">
         <td th:text="${user.userName}"></td>
         <td th:text="${user.getFollower().getSubscribers().size()}"></td>
         <td th:text="${user.getFollower().getSubscriptions().size()}"></td>

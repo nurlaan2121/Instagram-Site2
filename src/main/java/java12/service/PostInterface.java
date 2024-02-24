@@ -30,4 +30,7 @@ public interface PostInterface {
     void unlikePost(Long postId);
 
     void addComment(Long postId, String commentText);
+
+    List<PostDTO> search(String keyword);
+
 }

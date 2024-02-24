@@ -1,5 +1,6 @@
 package java12.service;
 
+import java12.entities.Post;
 import java12.entities.User;
 import java12.exceptions.NotFoundException;
 
@@ -18,4 +19,14 @@ public interface UserInterface {
     List<User> getAllUsers();
 
     List<User> search(String keyword);
+
+    void subscribe(Long userId);
+
+    User profile(Long userId);
+
+    List<Post> getAllPostFindUser(Long userId);
+
+    List<User> findUserGetAllSubscriptions(Long userId);
+
+    List<User> findUserGetAllSubscribers(Long userId);
 }
