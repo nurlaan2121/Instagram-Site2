@@ -1,4 +1,5 @@
 package java12.service.impl;
+
 import java12.dtoes.PostDTO;
 import java12.entities.Comment;
 import java12.entities.Post;
@@ -21,13 +22,14 @@ import java.util.List;
 public class PostImpl implements PostInterface {
     private final PostRepo postRepo;
     private final UserInterface userInterface;
+
     @Override
     public void save(Post newPost) {
         newPost.setComments(new ArrayList<>());
         newPost.setLikes(new ArrayList<>());
         newPost.setCreatedAd(Date.valueOf(LocalDate.now()));
         User currentUser = userInterface.getCurrentUser();
-        System.out.println(currentUser.getId() + "   "+ currentUser.getUserName());
+        System.out.println(currentUser.getId() + "   " + currentUser.getUserName());
         currentUser.getPosts().add(newPost);
         newPost.setUser(currentUser);
         postRepo.save(newPost);
@@ -82,6 +84,11 @@ public class PostImpl implements PostInterface {
 
     @Override
     public void addComment(Long postId, String commentText) {
-        postRepo.comment(postId,commentText);
+        postRepo.comment(postId, commentText);
+    }
+
+    @Override
+    public List<PostDTO> search(String keyword) {
+        return postRepo.search("%" + keyword + "%");
     }
 }

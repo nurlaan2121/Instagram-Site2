@@ -30,4 +30,6 @@ public interface PostRepo {
     void unLike(Long postId);
 
     void comment(Long postId, String commentText);
+
+    List<PostDTO> search(String keyword);
 }

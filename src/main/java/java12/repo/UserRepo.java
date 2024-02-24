@@ -1,5 +1,6 @@
 package java12.repo;
 
+import java12.entities.Post;
 import java12.entities.User;
 import java12.exceptions.NotFoundException;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,14 @@ public interface UserRepo {
     List<User> getMySubscription();
 
     List<User> search(String keyword);
+
+    void subscribe(Long userId);
+
+    User profileFindUser(Long userId);
+
+    List<Post> getAllPostFindUser(Long userId);
+
+    List<User> findUserGetAllSubscriptions(Long userId);
+
+    List<User> findUserGetAllSubscribers(Long userId);
 }

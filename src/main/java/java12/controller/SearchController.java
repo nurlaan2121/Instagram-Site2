@@ -45,6 +45,12 @@ public class SearchController {
         model.addAttribute("searchUsers", searchUsers);
         return "searchUser-page";
     }
+    @GetMapping("/posts/search")
+    String searchPosts(@RequestParam String keyword, Model model){
+        List<PostDTO> searchUsers = postInterface.search(keyword);
+        model.addAttribute("searchPosts", searchUsers);
+        return "search-page";
+    }
 
 
 }

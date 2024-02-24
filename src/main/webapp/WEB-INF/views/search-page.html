@@ -1,40 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>Post Search</title>
+    <title>User Search</title>
     <style>
-        /* Your existing styles remain unchanged */
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto;
+        .profile-container {
+            max-width: 800px;
             padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .post img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
         }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
+        .post img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
         }
+
+        .post h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .post p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post a.btn {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .post a.btn-danger {
+            background-color: #ff4d4d;
+        }
+
+        .post a.btn-primary {
+            background-color: #4d94ff;
+        }
+
+        .post a.btn:hover {
+            background-color: #0018ff;
+        }
+
+
+
+
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -46,387 +79,133 @@
             align-items: center;
         }
 
-        h2 {
+        h1 {
             color: #333;
             margin-bottom: 20px;
         }
 
-        input {
-            width: 80%;
-            padding: 10px;
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
             margin-bottom: 20px;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
         }
 
-        .search-icon {
-            position: absolute;
-            top: 50%;
-            right: 10%;
-            transform: translateY(-50%);
-            color: #555;
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #000cec;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
 
-        .post {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .post:hover {
-            transform: scale(1.02);
-        }
-
-        .post h2 {
-            color: #333;
-            font-size: 2em;
-            margin-bottom: 15px;
-        }
-
-        .post p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .post .card-body {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
         }
 
-        .post a.btn {
-            text-decoration: none;
-            color: #fff;
-            padding: 12px 18px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .subscribe-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 12px;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-right: 15px;
-            text-align: center;
-            width: 120px;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 10px;
             display: inline-block;
         }
-
-        .post a.btn-like {
-            background-color: #4d94ff;
-        }
-
-        .post a.btn-comment {
-            background-color: #ff9933;
-        }
-
-        .post a.btn:hover {
-            background-color: #0018ff;
+        .view-btn {
+            background-color: #3498db;
+            color: #af4c63;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-<h2>Post Search</h2>
-<div style="position: relative;">
-    <input type="text" id="searchInput" placeholder="Search posts..."/>
-    <i class="search-icon fas fa-search" onclick="searchPosts()"></i>
-</div>
+<h1>Post Search</h1>
 
-<div id="postList">
-    <!-- Example Post -->
-    <div class="post">
-        <h2>Post Title</h2>
-        <p>Post Content goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        <div class="card-body">
-            <a href="#" class="btn btn-like" data-post-id="1" onclick="likePost(1)"><i class="fas fa-thumbs-up"></i>
-                Like</a>
-            <a href="#" class="btn btn-comment" data-post-id="1" onclick="openModal(); commentPost(1)"><i
-                    class="fas fa-comment"></i> Comment</a>
-        </div>
-    </div>
-</div>
-
-<!-- Modal HTML -->
-<div id="commentModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <label for="commentInput">Enter your comment:</label>
-        <textarea id="commentInput"></textarea>
-        <button onclick="submitComment()">Submit</button>
-    </div>
-</div>
-
-<script>
-    var allPosts;
-    var likedPosts = [];
-
-    document.addEventListener("DOMContentLoaded", function () {
-        loadPostsAndLikedPosts();
-        setupEventListeners();
-    });
-
-    function loadPostsAndLikedPosts() {
-        loadPostsFromServer();
-        loadLikedPostsFromServer(); // Получение лайкнутых постов текущего пользователя
-    }
-
-    function setupEventListeners() {
-        // Добавление обработчика события input для поля ввода
-        document.getElementById("searchInput").addEventListener("input", function () {
-            searchPosts();
-        });
-    }
-
-    function loadLikedPostsFromServer() {
-        fetch('/getLikedPosts')  // Замените на фактическую точку доступа
-            .then(response => response.json())
-            .then(likedPostsData => {
-                likedPosts = likedPostsData; // Присвоение лайкнутых постов глобальной переменной
-                updateLikedPostStyles(); // Обновление стилей лайкнутых постов
-            })
-            .catch(error => console.error('Ошибка при получении лайкнутых постов:', error));
-    }
-
-    function loadPostsFromServer() {
-        console.log('Fetching posts...'); // Добавленная строка для проверки вызова функции
-        fetch('/getPosts')  // Укажите путь к вашему методу контроллера
-            .then(response => response.json())
-            .then(posts => {
-                allPosts = posts; // Присвоение полученных данных переменной allPosts
-                displayPosts(allPosts); // Отображение постов
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    function searchPosts() {
-        const searchInput = document.getElementById("searchInput").value.toLowerCase();
-        const postList = document.getElementById("postList");
-        postList.innerHTML = "";
-
-        if (allPosts) {
-            const filteredPosts = allPosts.filter(post =>
-                post.title.toLowerCase().includes(searchInput)
-            );
-
-            if (filteredPosts.length > 0) {
-                displayPosts(filteredPosts);
-            } else {
-                postList.innerHTML = "<p>No matching posts found.</p>";
-            }
-        } else {
-            console.error("Error: 'allPosts' is not defined.");
-        }
-    }
-
-    function displayPosts(posts) {
-        const postList = document.getElementById("postList");
-
-        if (postList && Array.isArray(posts)) {
-            posts.forEach(post => {
-                const postElement = createPostElement(post);
-                postList.appendChild(postElement);
-            })
-            updateLikedPostStyles();// Call the function to update styles for liked posts
-        } else {
-            console.error("Error: 'postList' is not defined or 'posts' is not an array.");
-        }
-    }
-
-
-    function createPostElement(post) {
-        const postElement = document.createElement("div");
-        postElement.classList.add("post");
-        postElement.innerHTML = `
-                <h2>${post.title}</h2>
-                <p>${post.description}</p>
-                <div class="card-body">
-                    <a href="#" class="btn btn-like" data-post-id="${post.id}" onclick="likePost(${post.id})"><i class="fas fa-thumbs-up"></i> Like</a>
-                    <a href="#" class="btn btn-comment" onclick="commentPost(${post.id})"><i class="fas fa-comment"></i> Comment</a>
-                </div>`;
-        displayPosts2(allPosts)
-        return postElement;
-    }
-    function displayPosts2(posts) {
-        posts.forEach(post => {
-            updateLikedPostStyles2(post.id);
-        })
-    }
-
-    function updateLikedPostStyles() {
-        // Обновление стилей лайкнутых постов на основе массива likedPosts
-        const likeButtons = document.querySelectorAll('.btn-like');
-
-        likeButtons.forEach(button => {
-            const postId = parseInt(button.getAttribute('data-post-id'));
-
-            if (likedPosts.includes(postId)) {
-                console.error('Update post')
-                button.style.backgroundColor = '#ff0000'; // Установка красного цвета фона для лайкнутых постов
-            } else {
-                console.error('Update post else')
-                button.style.backgroundColor = ''; // Сброс цвета фона, если пост не лайкнут
-            }
-        });
-    }
-
-    function updateLikedPostStyles2(postId) {
-        const likeButtons = document.querySelectorAll('.btn-like');
-        likeButtons.forEach(button => {
-            // Check if the current post is liked by the user
-            const isPostLiked = likedPosts.includes(postId);
-
-            // Update button style based on whether the post is liked
-            if (isPostLiked) {
-                button.style.backgroundColor = '#ff0000'; // Liked: Red background color
-            } else {
-                button.style.backgroundColor = ''; // Not liked: Reset background color
-            }
-        });
-    }
-
-    function openModal() {
-        document.getElementById('commentModal').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('commentModal').style.display = 'none';
-    }
-
-    function submitComment(postId) {
-        const commentText = document.getElementById('commentInput').value;
-
-        const commentEndpoint = `/comment/${postId}`;
-
-        fetch(commentEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({commentText: commentText}),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to comment on post with ID: ${postId}`);
-                }
-                console.log(`Commented on post with ID: ${postId}`);
-                closeModal();
-            })
-            .catch(error => {
-                console.error(error.message);
-            });
-    }
-
-    function checkLikedOrNoCurrentPost(postId) {
-        const isPostLiked = likedPosts.includes(postId);
-        if (isPostLiked) {
-            console.error('LAAAAIKK BAAAR')
-            updateLikedPostStyles();
-        } else {
-            console.error('JOOOOOKK')
-        }
-    }
-
-    // function likePost(postId) {
-    //     const likeEndpoint = `/like/${postId}`;
-    //
-    //     // Проверяем, лайкнут ли уже пост
-    //     const isPostLiked = likedPosts.includes(postId);
-    //
-    //     fetch(likeEndpoint, {
-    //         method: isPostLiked ? 'DELETE' : 'POST', // Используем DELETE, чтобы убрать лайк
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             // Включите любые дополнительные заголовки при необходимости (например, токен аутентификации)
-    //         },
-    //     })
-    //         .then(response => {
-    //             if (!response.ok) {
-    //                 throw new Error(`Failed to ${isPostLiked ? 'unlike' : 'like'} post with ID: ${postId}`);
-    //             }
-    //
-    //             console.log(`${isPostLiked ? 'Unliked' : 'Liked'} post with ID: ${postId}`);
-    //
-    //             // Обновляем массив лайкнутых постов
-    //             if (isPostLiked) {
-    //                 likedPosts = likedPosts.filter(id => id !== postId);
-    //             } else {
-    //                 likedPosts.push(postId);
-    //             }
-    //
-    //             // Обновляем стили лайкнутых постов
-    //             updateLikedPostStyles();
-    //         })
-    //         .catch(error => {
-    //             console.error(error.message);
-    //             // Обработайте ошибку по необходимости (например, покажите сообщение пользователю)
-    //         });
-    // }
-    function likePost(postId) {
-        const likeEndpoint = `/like/${postId}`;
-
-        // Проверяем, лайкнут ли уже пост
-        const isPostLiked = likedPosts.includes(postId);
-
-        fetch(likeEndpoint, {
-            method: 'POST', // Always use POST to like a post
-            headers: {
-                'Content-Type': 'application/json',
-                // Включите любые дополнительные заголовки при необходимости (например, токен аутентификации)
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to like post with ID: ${postId}`);
-                }
-
-                console.log(`Liked post with ID: ${postId}`);
-
-                // Если пост уже был лайкнут, не добавляем его в массив лайкнутых постов
-                if (!isPostLiked) {
-                    likedPosts.push(postId);
-                }
-
-                // // Обновляем стили лайкнутых постов
-                // updateLikedPostStyles();
-            })
-            .catch(error => {
-                console.error(error.message);
-                // Обработайте ошибку по необходимости (например, покажите сообщение пользователю)
-            });
-    }
-
-
-    function commentPost(postId) {
-        const commentText = prompt("Enter your comment:");
-
-        if (!commentText) {
-            // Handle the case where the user cancels or doesn't provide a comment
-            return;
-        }
-
-        const commentEndpoint = `/comment/${postId}`;
-
-        fetch(commentEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({commentText: commentText}),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to comment on post with ID: ${postId}`);
-                }
-                console.log(`Commented on post with ID: ${postId}`);
-            })
-            .catch(error => {
-                console.error(error.message);
-            });
-    }
-</script>
+<form th:action="@{/posts/search}" method="get">
+    <label for="keyword">Keyword:</label>
+    <input type="text" id="keyword" name="keyword" required>
+    <button type="submit">Search</button>
+</form>
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${searchPosts}">
+        <td th:text="${post.title}"></td>
+        <td th:text="${post.description}"></td>
+        <td>
+            <!-- Add the following lines to display the image -->
+            <img th:src="${post.getImageDTO().getUrl()}" alt="Post Image" />
+        </td>
+        <td>
+            <a th:href="@{'/user/like/' + ${post.id}}" class="subscribe-btn"
+               th:text="'Like to ' + ${''}">
+            </a>
+            <a th:href="@{'/user/comment/' + ${post.id}}" class="view-btn"
+               th:text="'Comment :' + ${''}">
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

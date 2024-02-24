@@ -3,6 +3,7 @@ package java12.repo.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java12.controller.MainPageController;
+import java12.dtoes.ImageDTO;
 import java12.dtoes.LikeDTO;
 import java12.dtoes.PostDTO;
 import java12.entities.*;
@@ -60,19 +61,19 @@ public class PostRepoImpl implements PostRepo {
     public List<Post> getMyHomePosts() {
         List<Long> subscriptions = UserImpl.user1.getFollower().getSubscriptions();
         List<Post> homePosts = new ArrayList<>();
-        List<User> followUsers = new ArrayList<>();
-        List<User> users = entityManager.createQuery("select u from User u ", User.class).getResultList();
-        for (int i = 0; i < subscriptions.size(); i++) {
-            for (int i1 = 0; i1 < users.size(); i1++) {
-                if (subscriptions.get(i).equals(users.get(i1).getId())) {
-                    followUsers.add(users.get(i1));
-                }
-            }
-        }
-        for (int i = 0; i < followUsers.size(); i++) {
-            List<Post> posts = entityManager.createQuery("select p from Post p where p.user.id = :userId order by createdAd desc", Post.class).setParameter("userId", followUsers.get(i)).getResultList();
-            homePosts.addAll(posts);
-        }
+//        List<User> followUsers = new ArrayList<>();
+//        List<User> users = entityManager.createQuery("select u from User u ", User.class).getResultList();
+//        for (int i = 0; i < subscriptions.size(); i++) {
+//            for (int i1 = 0; i1 < users.size(); i1++) {
+//                if (subscriptions.get(i).equals(users.get(i1).getId())) {
+//                    followUsers.add(users.get(i1));
+//                }
+//            }
+//        }
+//        for (int i = 0; i < followUsers.size(); i++) {
+//            List<Post> posts = entityManager.createQuery("select p from Post p where p.user.id = :userId order by createdAd desc", Post.class).setParameter("userId", followUsers.get(i)).getResultList();
+//            homePosts.addAll(posts);
+//        }
         return homePosts;
     }
 
@@ -151,5 +152,34 @@ public class PostRepoImpl implements PostRepo {
         entityManager.persist(comment);
         currentPost.getComments().add(comment);
         entityManager.merge(currentPost);
+    }
+
+    @Override
+    public List<PostDTO> search(String keyword) {
+        List<PostDTO> posts = entityManager.createQuery(
+                "SELECT new java12.dtoes.PostDTO(p.id, p.title, p.description, p.user.id, p.createdAd) FROM Post p where p.title ilike (:key) or p.description ilike (:key)",
+                PostDTO.class
+        ).setParameter("key", keyword).getResultList();
+        List<Post> allPostInDataBase = entityManager.createQuery("select p from Post p", Post.class).getResultList();
+        List<Post> newList = new ArrayList<>();
+        for (int i = 0; i < allPostInDataBase.size(); i++) {
+            for (int i1 = 0; i1 < posts.size(); i1++) {
+                if (allPostInDataBase.get(i).getId().equals(posts.get(i).getId())) {
+                    newList.add(allPostInDataBase.get(i));
+                }
+            }
+        }
+        for (int i = 0; i < newList.size(); i++) {
+            List<Image> images = newList.get(i).getImages();
+            ImageDTO imageDTO = new ImageDTO(images.get(0).getImageUrl());
+            for (int k = 0; k < posts.size(); k++) {
+                Long id = posts.get(k).getId();
+                List<LikeDTO> likes = entityManager.createQuery(
+                        "SELECT new java12.dtoes.LikeDTO(l.id,l.user.id,l.post.id) FROM Like l where l.post.id = :postId", LikeDTO.class).setParameter("postId", id).getResultList();
+                posts.get(k).setLikes(likes);
+                posts.get(k).setImageDTO(imageDTO);
+            }
+        }
+        return posts;
     }
 }

@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>My Profile</title>
     <style>
         body {
@@ -56,6 +59,12 @@
         }
 
         .profile-container {
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        } .profile-container2 {
             max-width: 800px;
             padding: 20px;
             background-color: #fff;
@@ -157,83 +166,61 @@
             color: #fff;
             background-color: #0018ff;
         }
-
-        .profile-container {
-            max-width: 800px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .post img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 15px;
-            border-radius: 8px;
-        }
-
-        .post h2 {
-            color: #333;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .post p {
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .post-actions {
+        .profile-info {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-around;
+            margin-bottom: 200px;
         }
 
-        .post a.btn {
-            text-decoration: none;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+        .profile-info img {
+            width: 100px; /* Adjust the size as needed */
+            border-radius: 50%;
         }
 
-        .post a.btn-danger {
-            background-color: #ff4d4d;
+        .profile-details {
+            flex-grow: 1;
+            margin-left: 50px; /* Adjust the margin as needed */
         }
 
-        .post a.btn-primary {
-            background-color: #4d94ff;
-        }
-
-        .post a.btn:hover {
-            background-color: #0018ff;
+        .profile-details h2,
+        .profile-details p {
+            margin: 0;
         }
     </style>
 </head>
 <body>
 <header>
-    <h1>My Profile</h1>
+    <h1>Profile</h1>
 </header>
 <nav>
     <a th:href="@{/home}" class="nav-link">Home</a>
     <a href="#">Search</a>
     <a href="#">Messages</a>
     <a th:href="@{create/post/new}" class="nav-link">Create post </a>
-    <a th:href="@{/myProfile}" class="nav-link">My profile </a></nav>
+    <a th:href="@{/myProfile}" class="nav-link">My profile </a>
+</nav>
+<section>
+    <div class="profile-container2">
+        <h2>User Profile</h2>
+        <div class="profile-info">
+            <img th:src="${profileUser.userInfo.imageProfile}" alt="Profile Image">
+            <div class="profile-details">
+                <h2 th:text="${profileUser.userName}"></h2>
+                <p th:text="${profileUser.userInfo.biography}"></p>
+            </div>
+        </div>
+    </div>
+</section>
 <section>
     <div class="profile-container">
-        <h2>My Posts</h2>
-        <div th:each="post : ${myAllPosts}" class="post">
-            <div class="post-content">
-                <h2 th:text="${post.title}"></h2>
-                <img th:src="${post.images[0].getImageUrl()}" alt="Post Image">
-                <p th:text="${post.description}"></p>
-            </div>
-            <div class="post-actions">
-                <a th:href="@{'create/post/delete/' + ${post.id}}" class="btn btn-danger">DELETE</a>
-                <a th:href="@{'create/post/update/' + ${post.id}}" class="btn btn-primary">Edit</a>
+        <h2>Posts</h2>
+        <div th:each="post : ${findUserPosts}">
+            <div class="post">
+                <div class="post-content">
+                    <h2 th:text="${post.title}"></h2>
+                    <p th:text="${post.description}"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -243,9 +230,8 @@
 <div class="meniki">
     <h2>Additional Navigation</h2>
     <ul>
-        <a th:href="@{user/update/user}" class="nav-link">Update Profile</a>
-        <a th:href="@{create/post/new}" class="nav-link">Subscriptions</a>
-        <a th:href="@{create/post/new}" class="nav-link">Subscribers</a>
+        <a th:href="@{'/user/subscribers/' + ${profileUser.id}}" class="nav-link">Subscribers</a>
+        <a th:href="@{'/user/subscriptions/' + ${profileUser.id}}" class="nav-link">Subscriptions</a>
     </ul>
 </div>
 </body>
