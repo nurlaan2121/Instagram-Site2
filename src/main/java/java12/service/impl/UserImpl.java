@@ -1,5 +1,6 @@
 package java12.service.impl;
 
+import java12.dtoes.UserDTO;
 import java12.entities.Follower;
 import java12.entities.Post;
 import java12.entities.User;
@@ -85,5 +86,10 @@ public class UserImpl implements UserInterface {
     @Override
     public List<User> findUserGetAllSubscribers(Long userId) {
         return userRepo.findUserGetAllSubscribers(userId);
+    }
+
+    @Override
+    public UserDTO getMyInfo() {
+        return userRepo.getMyInfo();
     }
 }

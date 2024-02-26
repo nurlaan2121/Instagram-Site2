@@ -13,6 +13,7 @@ public class PostDTO {
     private String title;
     private String description;
     private List<LikeDTO> likes;
+    private Long comments;
     private Long ownerId;
     private ImageDTO imageDTO;
     private Date createdAd;

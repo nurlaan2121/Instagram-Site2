@@ -238,14 +238,38 @@
         </div>
     </div>
 </div>
-<div th:each="post : ${myHomePosts}">
-    <div class="post">
-        <div class="post-content">
-            <h2 th:text="${post.title}"></h2>
-            <p th:text="${post.description}"></p>
+<!--<div th:each="post : ${myHomePosts}">-->
+<!--    <div class="post">-->
+<!--        <div class="post-content">-->
+<!--            <h2 th:text="${post.title}"></h2>-->
+<!--            <p th:text="${post.description}"></p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<section>
+    <div class="profile-container">
+        <div th:each="post : ${myHomePosts}" class="post">
+            <div class="post-content">
+                <h2 th:text="${post.title}"></h2>
+                <img th:src="${post.images[0].getImageUrl()}" alt="Post Image">
+                <p th:text="${post.description}"></p>
+            </div>
+            <td>
+                <a th:href="@{'/user/like/' + ${post.id}}" class="subscribe-btn"
+                   th:text="'Like to ' + ${''}">
+                </a>
+                <a th:href="@{'/user/info/' + ${post.id}}" class="subscribe-btn"
+                   th:text="'Info ' + ${''}">
+                </a>
+                <form th:action="@{'/user/comment/' + ${post.id}}" method="post">
+                    <label for="comment">Comment:</label>
+                    <input type="text" id="comment" name="comment" required>
+                    <button type="submit">Add Comment</button>
+                </form>
+            </td>
         </div>
     </div>
-</div>
+</section>
 
 <div id="commentModal" class="modal">
     <div class="modal-content">

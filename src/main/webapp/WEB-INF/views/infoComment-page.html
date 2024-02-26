@@ -6,67 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Search</title>
     <style>
-        .profile-container {
-            max-width: 800px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .post img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 15px;
-            border-radius: 8px;
-        }
-
-        .post img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 15px;
-            border-radius: 8px;
-        }
-
-        .post h2 {
-            color: #333;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .post p {
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .post-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .post a.btn {
-            text-decoration: none;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .post a.btn-danger {
-            background-color: #ff4d4d;
-        }
-
-        .post a.btn-primary {
-            background-color: #4d94ff;
-        }
-
-        .post a.btn:hover {
-            background-color: #0018ff;
-        }
-
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f4;
@@ -172,47 +111,37 @@
     </style>
 </head>
 <body>
-<h1>Post Search</h1>
-
-<form th:action="@{/posts/search}" method="get">
-    <label for="keyword">Keyword:</label>
-    <input type="text" id="keyword" name="keyword" required>
-    <button type="submit">Search</button>
-</form>
+<h1>User Search</h1>
 <table>
     <thead>
     <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Image</th>
+        <th>User Name</th>
+        <th>Comment</th>
+        <th>Created ad</th>
         <th>Likes</th>
-        <th>Comments</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="post : ${searchPosts}">
-        <td th:text="${post.title}"></td>
-        <td th:text="${post.description}"></td>
-        <td th:text="${post.getCreatedAd()}"></td>
-        <td th:text="${post.getLikes().size()}"></td>
-        <td th:text="${post.getComments()}"></td>
+    <tr th:each="comment : ${infoPost}">
+        <td th:text="${comment.userName}"></td>
+        <td th:text="${comment.comment}"></td>
+        <td th:text="${comment.createdAd}"></td>
+        <td th:text="${comment.likesCount}"></td>
         <td>
-            <!-- Add the following lines to display the image -->
-            <img th:src="${post.getImageDTO().getUrl()}" alt="Post Image"/>
-        </td>
-        <td>
-            <a th:href="@{'/user/like/' + ${post.id}}" class="subscribe-btn"
-               th:text="'Like to ' + ${''}">
+            <a th:href="@{'/user/subscribe/' + ${comment.userId}}" class="subscribe-btn"
+               th:text="'Subscribe to ' + ${comment.userName}">
             </a>
-            <a th:href="@{'/user/info/' + ${post.id}}" class="subscribe-btn"
-               th:text="'Info ' + ${''}">
+            <a th:href="@{'/user/profile/' + ${comment.userId}}" class="view-btn"
+               th:text="'View profile:' + ${comment.userName}">
             </a>
-            <form th:action="@{'/user/comment/' + ${post.id}}" method="post">
-                <label for="comment">Comment:</label>
-                <input type="text" id="comment" name="comment" required>
-                <button type="submit">Add Comment</button>
+            <form th:action="@{'/user/likeComment/' + ${comment.id}}" method="post">
+                <a
+                        th:text="'View profile:' + ${comment.id}">
+                </a>
+                <button type="submit">Like</button>
             </form>
+
         </td>
     </tr>
     </tbody>

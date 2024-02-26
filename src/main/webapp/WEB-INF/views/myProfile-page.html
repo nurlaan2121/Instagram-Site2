@@ -218,7 +218,7 @@
 </header>
 <nav>
     <a th:href="@{/home}" class="nav-link">Home</a>
-    <a href="#">Search</a>
+    <a th:href="@{search}" class="nav-link">Search</a>
     <a href="#">Messages</a>
     <a th:href="@{create/post/new}" class="nav-link">Create post </a>
     <a th:href="@{/myProfile}" class="nav-link">My profile </a></nav>
@@ -240,13 +240,24 @@
 </section>
 
 <!-- Follower information -->
+
 <div class="meniki">
     <h2>Additional Navigation</h2>
     <ul>
         <a th:href="@{user/update/user}" class="nav-link">Update Profile</a>
-        <a th:href="@{create/post/new}" class="nav-link">Subscriptions</a>
-        <a th:href="@{create/post/new}" class="nav-link">Subscribers</a>
+        <a th:href="@{'/user/subscribers/' + ${IAm}}" class="nav-link">Subscribers</a>
+        <a th:href="@{'/user/subscriptions/' + ${IAm}}" class="nav-link">Subscriptions</a>
     </ul>
+
+    <td th:text="${myInfo.getUserName()}"></td>
+    <td th:text="${myInfo.getEmail()}"></td>
+    <td th:text="${myInfo.getPhoneNumber()}"></td>
+    <td th:text="${myInfo.getFullName()}"></td>
+    <td th:text="${myInfo.getBio()}"></td>
+    <td>
+        <!-- Add the following lines to display the image -->
+        <img th:src="${myInfo.getProfileLink()}" alt="Post Image" style="width: 50%;"/>
+    </td>
 </div>
 </body>
 

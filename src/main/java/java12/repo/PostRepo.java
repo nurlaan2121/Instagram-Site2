@@ -1,5 +1,6 @@
 package java12.repo;
 
+import java12.dtoes.CommentDTO;
 import java12.dtoes.PostDTO;
 import java12.entities.Post;
 import org.springframework.stereotype.Repository;
@@ -32,4 +33,8 @@ public interface PostRepo {
     void comment(Long postId, String commentText);
 
     List<PostDTO> search(String keyword);
+
+    List<CommentDTO> getInfoAboutCurrentPost(Long id);
+
+    void likeComment(Long commentId);
 }

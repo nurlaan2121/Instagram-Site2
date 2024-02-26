@@ -1,5 +1,6 @@
 package java12.controller.user;
 
+import java12.dtoes.CommentDTO;
 import java12.entities.Post;
 import java12.entities.User;
 import java12.entities.UserInfo;
@@ -64,11 +65,22 @@ public class UserController {
         postInterface.likePost(id);
         return "redirect:/search";
     }
+    @GetMapping("/info/{id}")
+    public String info(@PathVariable Long id,Model model) {
+        List<CommentDTO> commentDTO = postInterface.infoAboutCurrentPost(id);
+        model.addAttribute("infoPost",commentDTO);
+        return "infoComment-page";
+    }
 
-    @GetMapping("/comment/{id}")
-    public String comment(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
-        String commentText = requestBody.get("commentText");
-        postInterface.addComment(id, commentText);
+    @PostMapping("/comment/{postId}")
+    public String addComment(@PathVariable Long postId, @RequestParam String comment) {
+        postInterface.addComment(postId,comment);
+        return "redirect:/search";
+    }
+    @PostMapping("/likeComment/{commentId}")
+    public String likeComment(@PathVariable Long commentId) {
+        postInterface.addLikeToComment(commentId);
+        System.out.println("!!!!!!!!!!!!!!!!!");
         return "redirect:/search";
     }
 

@@ -14,7 +14,6 @@ import java.util.List;
 public class SearchUserController {
     private final UserInterface userInterface;
 
-
     @GetMapping("/getFollows")
     @ResponseBody
     public List<User> getFollows() {

@@ -2,9 +2,12 @@ package java12.repo.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java12.dtoes.CommentDTO;
+import java12.dtoes.UserDTO;
 import java12.entities.Follower;
 import java12.entities.Post;
 import java12.entities.User;
+import java12.entities.UserInfo;
 import java12.exceptions.NotFoundException;
 import java12.repo.UserRepo;
 import java12.service.impl.UserImpl;
@@ -98,7 +101,7 @@ public class UserRepoImpl implements UserRepo {
             subscriptions.add(userId);
             findUser.getFollower().getSubscribers().add(UserImpl.user1.getId());
             entityManager.merge(findUser);
-            entityManager.merge(UserImpl.user1);
+            entityManager.merge(UserImpl.user1.getFollower());
         }
     }
 
@@ -137,5 +140,15 @@ public class UserRepoImpl implements UserRepo {
             users.add(userId1);
         }
         return users;
+    }
+
+    @Override
+    public UserDTO getMyInfo() {
+        UserDTO currentUser = entityManager.createQuery("select new java12.dtoes.UserDTO(u.id,u.userName,u.email,u.phoneNumber) from User u where u.id = :userId", UserDTO.class).setParameter("userId", UserImpl.user1.getId()).getSingleResult();
+        UserInfo userInfo = entityManager.createQuery("select i from UserInfo i join User u on u.userInfo.id = i.id where u.id = :userId", UserInfo.class).setParameter("userId", UserImpl.user1.getId()).getSingleResult();
+        currentUser.setBio(userInfo.getBiography());
+        currentUser.setFullName(userInfo.getFullName());
+        currentUser.setProfileLink(userInfo.getImageProfile());
+        return currentUser;
     }
 }

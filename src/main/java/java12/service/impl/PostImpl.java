@@ -1,5 +1,6 @@
 package java12.service.impl;
 
+import java12.dtoes.CommentDTO;
 import java12.dtoes.PostDTO;
 import java12.entities.Comment;
 import java12.entities.Post;
@@ -90,5 +91,15 @@ public class PostImpl implements PostInterface {
     @Override
     public List<PostDTO> search(String keyword) {
         return postRepo.search("%" + keyword + "%");
+    }
+
+    @Override
+    public List<CommentDTO> infoAboutCurrentPost(Long id) {
+        return postRepo.getInfoAboutCurrentPost(id);
+    }
+
+    @Override
+    public void addLikeToComment(Long commentId) {
+        postRepo.likeComment(commentId);
     }
 }

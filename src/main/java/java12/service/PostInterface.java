@@ -1,5 +1,6 @@
 package java12.service;
 
+import java12.dtoes.CommentDTO;
 import java12.dtoes.PostDTO;
 import java12.entities.Post;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,9 @@ public interface PostInterface {
     void addComment(Long postId, String commentText);
 
     List<PostDTO> search(String keyword);
+
+    List<CommentDTO> infoAboutCurrentPost(Long id);
+
+    void addLikeToComment(Long commentId);
 
 }

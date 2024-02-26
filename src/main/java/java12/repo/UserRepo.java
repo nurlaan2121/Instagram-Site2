@@ -1,5 +1,6 @@
 package java12.repo;
 
+import java12.dtoes.UserDTO;
 import java12.entities.Post;
 import java12.entities.User;
 import java12.exceptions.NotFoundException;
@@ -31,4 +32,7 @@ public interface UserRepo {
     List<User> findUserGetAllSubscriptions(Long userId);
 
     List<User> findUserGetAllSubscribers(Long userId);
+
+    UserDTO getMyInfo();
+
 }
